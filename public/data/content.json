@@ -1,0 +1,16 @@
+[
+    {
+        "media": [
+            {
+                "uri": "media/posts/202301/test_image.jpg",
+                "creation_timestamp": 1672531200,
+                "title": "Test Post 1"
+            },
+            {
+                "uri": "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba",
+                "creation_timestamp": 1672617600,
+                "title": "Test Post 2 (External)"
+            }
+        ]
+    }
+]
