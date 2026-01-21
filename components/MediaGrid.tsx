@@ -251,7 +251,7 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
                     )}
 
                     {isCarousel && (
-                        <div className="absolute bottom-16 flex gap-2">
+                        <div className="absolute bottom-24 flex gap-2">
                             {lightboxItem.carousel_media!.map((_, idx) => (
                                 <div
                                     key={idx}
@@ -261,10 +261,17 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
                         </div>
                     )}
 
-                    <div className="mt-4 text-center text-white bg-black/20 p-4 rounded-xl backdrop-blur-sm">
-                        <p className="font-medium text-lg">{title}</p>
-                        <p className="text-sm text-gray-400 mt-1">{timestamp} • Post {currentPostIndex + 1} of {currentItems.length}</p>
-                    </div>
+                    {title && (
+                        <div className="mt-4 max-w-2xl w-full text-white bg-black/40 p-4 rounded-xl backdrop-blur-sm max-h-32 overflow-y-auto">
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">{title}</p>
+                            <p className="text-xs text-gray-300 mt-2">{timestamp} • Post {currentPostIndex + 1} of {currentItems.length}</p>
+                        </div>
+                    )}
+                    {!title && (
+                        <div className="mt-4 text-center text-white bg-black/20 p-2 rounded-xl backdrop-blur-sm">
+                            <p className="text-xs text-gray-400">{timestamp} • Post {currentPostIndex + 1} of {currentItems.length}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         );
