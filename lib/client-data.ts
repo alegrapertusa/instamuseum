@@ -243,7 +243,8 @@ export async function parseInstagramData(files: FileList): Promise<InstagramData
                     uri: child.uri,
                     creation_timestamp: child.creation_timestamp || post.creation_timestamp,
                     title: decodeInstagramString(child.title || post.title || ''),
-                    is_archived: post.is_archived
+                    is_archived: post.is_archived,
+                    is_video: child.uri?.toLowerCase().endsWith('.mp4') || child.uri?.toLowerCase().endsWith('.mov')
                 }));
 
                 return {
@@ -251,15 +252,18 @@ export async function parseInstagramData(files: FileList): Promise<InstagramData
                     creation_timestamp: post.creation_timestamp || children[0].creation_timestamp,
                     title: decodeInstagramString(post.title || ''),
                     is_archived: post.is_archived,
+                    is_video: children[0].is_video,
                     carousel_media: children // Store all slides
                 };
             }
             // Otherwise assume it's a direct media item (legacy or flat structure)
+            const isVideo = post.uri?.toLowerCase().endsWith('.mp4') || post.uri?.toLowerCase().endsWith('.mov');
             return {
                 uri: post.uri,
                 creation_timestamp: post.creation_timestamp,
                 title: decodeInstagramString(post.title || ''),
-                is_archived: post.is_archived
+                is_archived: post.is_archived,
+                is_video: isVideo
             };
         });
     };
@@ -327,11 +331,13 @@ export async function parseInstagramData(files: FileList): Promise<InstagramData
     const storiesData = await readJson('stories.json');
     let stories: StoryItem[] = [];
     if (storiesData) {
-        if (storiesData.ig_stories) {
-            stories = storiesData.ig_stories;
-        } else if (Array.isArray(storiesData)) {
-            stories = storiesData;
-        }
+        const rawStories = storiesData.ig_stories || (Array.isArray(storiesData) ? storiesData : []);
+        stories = rawStories.map((s: any) => ({
+            uri: s.uri,
+            creation_timestamp: s.creation_timestamp,
+            title: decodeInstagramString(s.title || ''),
+            is_video: s.uri?.toLowerCase().endsWith('.mp4') || s.uri?.toLowerCase().endsWith('.mov')
+        }));
     }
 
     // --- Followers / Following ---

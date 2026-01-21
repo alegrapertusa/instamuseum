@@ -153,15 +153,34 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
                                 onClick={() => openLightbox(item)}
                             >
                                 {src ? (
-                                    <img
-                                        src={src}
-                                        alt={title}
-                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                        loading="lazy"
-                                    />
+                                    item.is_video ? (
+                                        <div className="relative w-full h-full">
+                                            <video
+                                                src={src}
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                muted
+                                                playsInline
+                                                preload="metadata"
+                                            />
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="bg-black/20 backdrop-blur-sm p-2 rounded-full">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white shadow-sm" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M8 5v14l11-7z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <img
+                                            src={src}
+                                            alt={title}
+                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            loading="lazy"
+                                        />
+                                    )
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center bg-gray-200 text-xs text-gray-400">
-                                        Missing Image
+                                        Missing Media
                                     </div>
                                 )}
                                 {isCarousel && (
@@ -219,13 +238,13 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
 
                 <div className="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
                     {src ? (
-                        src.toLowerCase().includes('.mp4') || src.toLowerCase().includes('.mov') ? (
-                            <video src={src} controls className="max-h-[80vh] w-auto object-contain" autoPlay loop muted />
+                        currentMediaItem.is_video ? (
+                            <video src={src} controls className="max-h-[80vh] w-auto object-contain" autoPlay loop playsInline />
                         ) : (
                             <img src={src} alt={title} className="max-h-[80vh] w-auto object-contain" />
                         )
                     ) : (
-                        <div className="w-64 h-64 flex items-center justify-center bg-gray-800 text-white">Image Not Found</div>
+                        <div className="w-64 h-64 flex items-center justify-center bg-gray-800 text-white">Media Not Found</div>
                     )}
 
                     {hasPrevPost && (

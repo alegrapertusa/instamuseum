@@ -20,6 +20,7 @@ export interface MediaItem {
   };
   title?: string;
   is_archived?: boolean;
+  is_video?: boolean;
   carousel_media?: MediaItem[]; // For carousels/swipeable posts
 }
 
@@ -27,6 +28,7 @@ export interface StoryItem {
   uri: string;
   creation_timestamp: number;
   title?: string;
+  is_video?: boolean;
 }
 
 export interface Connection {
