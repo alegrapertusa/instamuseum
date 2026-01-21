@@ -156,11 +156,13 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
                                     item.is_video ? (
                                         <div className="relative w-full h-full">
                                             <video
+                                                key={src}
                                                 src={src}
                                                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 muted
                                                 playsInline
                                                 preload="metadata"
+                                                onError={(e) => console.log('Video load error:', e)}
                                             />
                                             <div className="absolute inset-0 flex items-center justify-center">
                                                 <div className="bg-black/20 backdrop-blur-sm p-2 rounded-full">
@@ -239,7 +241,22 @@ export default function MediaGrid({ media, stories, blobMap }: MediaGridProps) {
                 <div className="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
                     {src ? (
                         currentMediaItem.is_video ? (
-                            <video src={src} controls className="max-h-[80vh] w-auto object-contain" autoPlay loop playsInline />
+                            <div className="relative w-full flex justify-center">
+                                <video
+                                    key={src}
+                                    src={src}
+                                    controls
+                                    className="max-h-[80vh] w-auto object-contain"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    onError={(e) => console.error('Lightbox video error:', e)}
+                                />
+                                <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm px-2 py-1 rounded text-[10px] text-white/70 uppercase tracking-widest">
+                                    Video Mode
+                                </div>
+                            </div>
                         ) : (
                             <img src={src} alt={title} className="max-h-[80vh] w-auto object-contain" />
                         )

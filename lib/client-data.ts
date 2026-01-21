@@ -371,7 +371,21 @@ export function createBlobUrlMap(files: FileList): Map<string, string> {
     const map = new Map<string, string>();
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const url = URL.createObjectURL(file);
+
+        let fileToUse = file;
+
+        // Fix for missing MIME types in some environments (e.g. online/production)
+        // Browsers like Safari can be picky if the Blob URL doesn't have a correct video MIME type
+        if (!file.type || file.type === '') {
+            const ext = file.name.split('.').pop()?.toLowerCase();
+            if (ext === 'mp4') {
+                fileToUse = new File([file], file.name, { type: 'video/mp4' });
+            } else if (ext === 'mov') {
+                fileToUse = new File([file], file.name, { type: 'video/quicktime' });
+            }
+        }
+
+        const url = URL.createObjectURL(fileToUse);
 
         // Use lowercase for case-insensitive lookup
         map.set(file.name.toLowerCase(), url);
